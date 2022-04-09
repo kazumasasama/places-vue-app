@@ -9,6 +9,7 @@
     <dialog id="place-dialog">
       <form method="dialog">
         <p>{{ place }}</p>
+        <div id="map"></div>
         <button>Update</button>
         <button class="delete-btn">Delete</button>
         <button>Close</button>
@@ -18,6 +19,7 @@
 </template>
 
 <script>
+import L from "../../node_modules/leaflet/dist/leaflet"
 import axios from "axios"
 export default {
   name: 'HomeView',
@@ -28,6 +30,7 @@ export default {
         address: "",
       },
       places: [],
+      map: {},
     }
   },
   created() {
@@ -43,6 +46,17 @@ export default {
     showPlace(place) {
       this.place = place
       document.getElementById("place-dialog").showModal();
+
+      var map = L.map('map').setView([38.508106, 134.930239], 13);
+
+      L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png', {
+        attribution: '© 国土地理院'
+      }).addTo(map);
+
+      //マーカー表示の記述
+      L.marker([34.7019620, 135.509686]).addTo(map)
+        .bindPopup('ここにいます')
+        .openPopup();
     }
   }
 }
@@ -54,6 +68,7 @@ export default {
 }
 
 #map {
-  height: 180px;
+  height: 300px;
+  width: 100vw;
 }
 </style>
